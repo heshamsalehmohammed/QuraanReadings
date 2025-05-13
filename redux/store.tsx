@@ -3,7 +3,6 @@ import { configureStore } from "@reduxjs/toolkit";
 import userSettingsReducer from "./slices/userSetting/userSettingSlice";
 import authReducer from "./slices/auth/authSlice";
 import utilitiesReducer from "./slices/utilities/utilitiesSlice";
-import fleetManagementReducer from "./slices/fleetManagement/fleetManagementSlice";
 import ReduxDispatchSingleton from "../services/reduxDispatchSingleton";
 
 const store = configureStore({
@@ -11,7 +10,6 @@ const store = configureStore({
     userSettings: userSettingsReducer,
     auth: authReducer,
     utilities: utilitiesReducer,
-    fleetManagement: fleetManagementReducer
   },
 });
 

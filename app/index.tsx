@@ -1,10 +1,11 @@
-import { StyleSheet, ImageBackground, Keyboard } from "react-native";
+import { StyleSheet, ImageBackground, Keyboard, Dimensions, ScrollView } from "react-native";
 import {
   AppForm,
   AppFormField,
   ErrorMessage,
   StatusText,
   SubmitButton,
+  Text,
   View,
 } from "@/components/Themed";
 import AppLogoDark from "../assets/images/app-logo-dark.svg";
@@ -19,10 +20,18 @@ import { useRouter } from "expo-router";
 import { ErrorModel } from "@/services/axios";
 import { BackendErrorTypes } from "@/constants/backendErrorContract";
 
-const validationSchema = Yup.object().shape({
-  username: Yup.string().required().label("Username"),
-  password: Yup.string().required().min(4).label("Password"),
-});
+import Page1 from "../assets/pages/shoba/page1.svg";
+import Page2 from "../assets/pages/shoba/page2.svg";
+import Page3 from "../assets/pages/shoba/page3.svg";
+import Page4 from "../assets/pages/shoba/page4.svg";
+import Page5 from "../assets/pages/shoba/page5.svg";
+import Page6 from "../assets/pages/shoba/page6.svg";
+import Page7 from "../assets/pages/shoba/page7.svg";
+import Page8 from "../assets/pages/shoba/page8.svg";
+
+
+const windowWidth = Dimensions.get("window").width;
+
 
 export default function LoginScreen() {
   const dispatch = useDispatch();
@@ -30,95 +39,21 @@ export default function LoginScreen() {
 
   const theme = useColorScheme() ?? "light";
 
-  const [backendError, setBackendError] = useState<string | undefined>(
-    undefined
-  );
-  const [secureTextEntry, setSecureTextEntry] = useState<boolean>(true);
+const pages = [Page1, Page2,Page3,Page4,Page5,Page6,Page7,Page8]; // Add all your page components here
 
-  const handleLogin = (values: any, formikAPI: any) => {
-    Keyboard.dismiss();
-    dispatch(loginUser(values))
-      .then(unwrapResult)
-      .then((res: any) => {
-        const scopes = res.result.scope.split(",");
-        const pagesPermissions = ["5", "2", "3", "4", "22", "21"];
-        router.replace("/home");
-      })
-      .catch((err: ErrorModel) => {
-        let [errKey, errCount] = err.errResponse.debugInfo.msgHistory;
-        if (errKey === BackendErrorTypes.RESET_PASSWORD) {
-        } else {
-          setBackendError(
-            BackendErrorTypes[errKey as keyof typeof BackendErrorTypes]
-          );
-        }
-      });
-  };
-
-  return (
-    <View style={styles.container}>
-      <ImageBackground
-        source={require("../assets/images/Login_Bg.png")} // Replace with your image path
-        resizeMode="contain"
-        style={styles.background}
-      />
-      <View style={styles.loginFormContainer}>
-        {theme === "light" ? (
-          <AppLogoDark height={64} width={200} />
-        ) : (
-          <AppLogoLight height={64} width={200} />
-        )}
-        <StatusText
-          showIcon
-          status="info"
-          style={{
-            marginBottom: 15,
-          }}
-        >
-          If you have problems logging in, please contact your administrator .
-        </StatusText>
-        <AppForm
-          initialValues={{ username: "", password: "" }}
-          onSubmit={handleLogin}
-          handleChange={() => {
-            setBackendError(undefined);
-          }}
-          validationSchema={validationSchema}
-        >
-          <ErrorMessage error={backendError} style={{ fontSize: 14 }} />
-          <AppFormField
-            autoCapitalize="none"
-            autoCorrect={false}
-            leftIcon="user"
-            keyboardType="email-address"
-            label={"Username"}
-            name="username"
-            placeholder="Username"
-            textContentType="emailAddress"
-            style={{ marginBottom: 10 }}
-          />
-          <AppFormField
-            autoCapitalize="none"
-            autoCorrect={false}
-            rightIcon="eye"
-            leftIcon="lock"
-            name="password"
-            placeholder="Password"
-            secureTextEntry={secureTextEntry}
-            textContentType="password"
-            label={"Password"}
-            style={{ marginBottom: 15 }}
-            rightIconClickHandler={() => {
-              setSecureTextEntry((prev) => !prev);
-            }}
-          />
-
-          <SubmitButton style={{ width: "100%" }} title="Login" />
-        </AppForm>
+return (
+  <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingBottom: 40 }}>
+    {pages.map((SvgPage, index) => (
+      <View key={index} style={{ width: windowWidth, height: 800 }}>
+        <SvgPage width="100%" height="100%" />
       </View>
-    </View>
-  );
+    ))}
+  </ScrollView>
+);
 }
+
+
+
 
 const styles = StyleSheet.create({
   container: {
