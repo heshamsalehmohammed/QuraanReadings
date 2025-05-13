@@ -19,13 +19,6 @@ export default function RootLayout() {
         }}
       />
       <Stack.Screen
-        name="track-modal"
-        options={{
-          header: () => <ModalHeader title="Tracker" />,
-          presentation: "modal",
-        }}
-      />
-      <Stack.Screen
         name="notifications-modal"
         options={{
           header: () => <ModalHeader title="Notifications" />,

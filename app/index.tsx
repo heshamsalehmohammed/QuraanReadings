@@ -1,18 +1,16 @@
-import { StyleSheet, ImageBackground, Keyboard, Platform, Dimensions } from "react-native";
+import { StyleSheet, ImageBackground, Keyboard } from "react-native";
 import {
   AppForm,
   AppFormField,
   ErrorMessage,
   StatusText,
   SubmitButton,
-  Text,
-  TextInput,View
+  View,
 } from "@/components/Themed";
 import AppLogoDark from "../assets/images/app-logo-dark.svg";
 import AppLogoLight from "../assets/images/app-logo-light.svg";
 import { useColorScheme } from "react-native";
 import { useState } from "react";
-import { Button } from "@ui-kitten/components";
 import * as Yup from "yup";
 import { useDispatch } from "react-redux";
 import { loginUser } from "@/redux/slices/auth/authSlice";
@@ -20,19 +18,11 @@ import { unwrapResult } from "@reduxjs/toolkit";
 import { useRouter } from "expo-router";
 import { ErrorModel } from "@/services/axios";
 import { BackendErrorTypes } from "@/constants/backendErrorContract";
-import { closeConfirmationPopup, openConfirmationPopup, openPopup } from "@/redux/slices/utilities/utilitiesSlice";
-import ConfirmationPopupActionsHandler from "@/services/ConfirmationPopupActionsHandler";
-import DateTimePicker from "@react-native-community/datetimepicker";
-import DateTimeIntervalPicker from "@/components/common/DateTimeIntervalPicker";
-import SlideUpModal from "@/components/screens/Modals/SlideUpModal";
-
 
 const validationSchema = Yup.object().shape({
   username: Yup.string().required().label("Username"),
   password: Yup.string().required().min(4).label("Password"),
 });
-
-
 
 export default function LoginScreen() {
   const dispatch = useDispatch();
@@ -43,10 +33,10 @@ export default function LoginScreen() {
   const [backendError, setBackendError] = useState<string | undefined>(
     undefined
   );
-  const [secureTextEntry, setSecureTextEntry] = useState<boolean>(true); 
+  const [secureTextEntry, setSecureTextEntry] = useState<boolean>(true);
 
   const handleLogin = (values: any, formikAPI: any) => {
-    Keyboard.dismiss()
+    Keyboard.dismiss();
     dispatch(loginUser(values))
       .then(unwrapResult)
       .then((res: any) => {
@@ -64,7 +54,7 @@ export default function LoginScreen() {
         }
       });
   };
-  
+
   return (
     <View style={styles.container}>
       <ImageBackground

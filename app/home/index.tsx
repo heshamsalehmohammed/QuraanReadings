@@ -11,7 +11,7 @@ export default function TrackingTabScreen() {
       <Button
         title="Track"
         style={styles.button}
-        onPress={() => router.push("/track-modal")}
+        onPress={() => {}}
       />
     </View>
   );

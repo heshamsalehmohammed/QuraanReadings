@@ -13,3 +13,11 @@ adb install heshamapp3.apk
 
 // run the metro server 
 npx expo start
+
+
+// run the emulator 
+emulator -avd Pixel_8_Pro_API_35
+
+
+// running the prject in emulator in one shot 
+emulator -avd Pixel_8_Pro_API_35 & sleep 30 && npx expo start --android
