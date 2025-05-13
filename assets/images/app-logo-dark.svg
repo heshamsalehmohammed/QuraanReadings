@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="175.9" height="59.11" viewBox="0 0 175.9 59.11">
+  <defs>
+    <clipPath id="clip-path">
+      <rect width="175.9" height="58.894" fill="none" />
+    </clipPath>
+    <clipPath id="clip-path-2">
+      <path d="M397.11,53.026a19.716,19.716,0,1,1,19.716,19.716A19.716,19.716,0,0,1,397.11,53.026m-5.21,0A24.926,24.926,0,1,0,416.826,28.1,24.926,24.926,0,0,0,391.9,53.026" transform="translate(-391.9 -28.1)" fill="none" />
+    </clipPath>
+    <linearGradient id="linear-gradient" x1="0" y1="1" x2="1" y2="1">
+      <stop offset="0" stop-color="#fadc1e" />
+      <stop offset="0.43" stop-color="#f9ba1e" />
+      <stop offset="0.94" stop-color="#ef9318" />
+      <stop offset="1" stop-color="#ef9318" />
+    </linearGradient>
+    <clipPath id="clip-path-3">
+      <path d="M327.029,85.482l.225,2.091a4.567,4.567,0,0,0,4.953,4.117l16.821.064a4.567,4.567,0,0,0,3.956-5.082l-.225-2.091a4.567,4.567,0,0,0-4.953-4.117L330.985,80.4a4.567,4.567,0,0,0-3.956,5.082" transform="translate(-326.995 -80.4)" fill="none" />
+    </clipPath>
+    <linearGradient id="linear-gradient-2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fabd1e" />
+      <stop offset="0.3" stop-color="#f19a19" />
+      <stop offset="1" stop-color="#ef9318" />
+    </linearGradient>
+  </defs>
+  <g transform="translate(87.95 29.447)">
+    <g transform="translate(-87.95 -29.447)">
+      <path d="M32.774,1.2,24.669,16.992,16.21,1.2H0L16.242,28.828V49.123H30.619V28.828L45.736,1.2Z" transform="translate(0 -0.814)" fill="#77778d" />
+      <g clip-path="url(#clip-path)">
+        <path d="M183.565,49.123H171.5L158.317,27.96a80.441,80.441,0,0,1-5.146-9.906,33.388,33.388,0,0,1,1.158,7.88V49.155H142.3V1.2h13.991l11.257,17.561a67.7,67.7,0,0,1,5.082,9.2A69.279,69.279,0,0,1,171.5,15.384V1.2h12.061Z" transform="translate(-96.532 -0.814)" fill="#77778d" />
+        <rect width="14.827" height="47.929" transform="translate(89.671)" fill="#77778d" />
+        <path d="M362.249,1.2,354.5,14.1,347,1.2H329.7l14.924,23.19-.611.965h5.564A26.5,26.5,0,0,1,370.933,8.533L375.565,1.2Z" transform="translate(-223.658 -0.814)" fill="#77778d" />
+        <path d="M333.879,120.1l-6.079,9.681h13.573l5.661-9.488v-.161Z" transform="translate(-222.369 -81.472)" fill="#77778d" />
+        <rect width="3.184" height="3.271" transform="translate(152.164 46.186)" fill="#009fe5" />
+        <rect width="4.342" height="4.458" transform="translate(145.345 37.599)" fill="#009fe5" />
+        <rect width="2.251" height="2.296" transform="translate(146.792 45.028)" fill="#009fe5" />
+        <rect width="2.251" height="2.296" transform="translate(153.129 40.847)" fill="#009fe5" />
+        <path d="M415.6,77.574h3.216v6.915h7.526V81.755h3.088L420.457,67.7a17.143,17.143,0,0,0-4.857,9.906" transform="translate(-281.93 -45.926)" fill="#77778d" />
+        <path d="M417.026,113.416V105.6H415a17.11,17.11,0,0,0,2.026,7.816" transform="translate(-281.523 -71.636)" fill="#77778d" />
+        <path d="M425.1,129.131a17.3,17.3,0,0,0,4.181,4.085h3.409V125.4H425.1Z" transform="translate(-288.375 -85.067)" fill="#77778d" />
+        <path d="M455.3,156.632v.257a17.239,17.239,0,0,0,4.246.515v-.8Z" transform="translate(-308.861 -106.233)" fill="#77778d" />
+      </g>
+      <g transform="translate(126.047 9.038)" clip-path="url(#clip-path-2)">
+        <rect width="49.853" height="49.843" transform="translate(0 0)" fill="url(#linear-gradient)" />
+      </g>
+      <g transform="translate(105.172 25.859)" clip-path="url(#clip-path-3)">
+        <rect width="26.535" height="11.752" transform="translate(-0.256 -0.225)" fill="url(#linear-gradient-2)" />
+      </g>
+    </g>
+  </g>
+</svg>

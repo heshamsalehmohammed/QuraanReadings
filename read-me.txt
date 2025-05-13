@@ -1,0 +1,15 @@
+### expo sdk list ###
+https://docs.expo.dev/versions/latest/sdk/expo/
+
+
+
+### development build ###
+
+// build the app in development
+eas build --profile development --platform android
+
+// install the build on real device 
+adb install heshamapp3.apk
+
+// run the metro server 
+npx expo start
