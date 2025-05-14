@@ -1,80 +1,156 @@
-import { StyleSheet, ImageBackground, Keyboard, Dimensions, ScrollView } from "react-native";
 import {
-  AppForm,
-  AppFormField,
-  ErrorMessage,
-  StatusText,
-  SubmitButton,
-  Text,
-  View,
-} from "@/components/Themed";
-import AppLogoDark from "../assets/images/app-logo-dark.svg";
-import AppLogoLight from "../assets/images/app-logo-light.svg";
-import { useColorScheme } from "react-native";
-import { useState } from "react";
-import * as Yup from "yup";
+  StyleSheet,
+  Dimensions,
+  ScrollView,
+  Image,
+  Pressable,
+} from "react-native";
+import { Text, View } from "@/components/Themed";
 import { useDispatch } from "react-redux";
-import { loginUser } from "@/redux/slices/auth/authSlice";
-import { unwrapResult } from "@reduxjs/toolkit";
 import { useRouter } from "expo-router";
-import { ErrorModel } from "@/services/axios";
-import { BackendErrorTypes } from "@/constants/backendErrorContract";
+import { useEffect, useState } from "react";
+import { Audio } from "expo-av";
+import ImageZoom from "react-native-image-pan-zoom";
 
-import Page1 from "../assets/pages/shoba/page1.svg";
-import Page2 from "../assets/pages/shoba/page2.svg";
-import Page3 from "../assets/pages/shoba/page3.svg";
-import Page4 from "../assets/pages/shoba/page4.svg";
-import Page5 from "../assets/pages/shoba/page5.svg";
-import Page6 from "../assets/pages/shoba/page6.svg";
-import Page7 from "../assets/pages/shoba/page7.svg";
-import Page8 from "../assets/pages/shoba/page8.svg";
+// Static imports
+const pageImage = require("../assets/pages/shoba/page-001.png");
+const wordData = require("../assets/pagesMappings/shoba/page-001.json");
 
+const audioMap: Record<string, any> = {
+  "001.mp3": require("../assets/sounds/shoba/001.mp3"),
+};
 
 const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
 
+const originalWidth = 1600;
+const originalHeight = 2308;
 
-export default function LoginScreen() {
+export default function QuranPage() {
   const dispatch = useDispatch();
   const router = useRouter();
+  const [imageHeight, setImageHeight] = useState(600);
 
-  const theme = useColorScheme() ?? "light";
+  const playAudio = async (filename: string) => {
+    try {
+      const asset = audioMap[filename];
+      if (!asset) {
+        console.error("Audio not found in audioMap for:", filename);
+        return;
+      }
 
-const pages = [Page1, Page2,Page3,Page4,Page5,Page6,Page7,Page8]; // Add all your page components here
+      console.log("Loading audio:", filename);
+      const soundObject = new Audio.Sound();
+      await soundObject.loadAsync(asset);
+      await soundObject.playAsync();
+    } catch (error) {
+      console.error("Audio error:", error);
+    }
+  };
 
-return (
-  <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingBottom: 40 }}>
-    {pages.map((SvgPage, index) => (
-      <View key={index} style={{ width: windowWidth, height: 800 }}>
-        <SvgPage width="100%" height="100%" />
-      </View>
-    ))}
-  </ScrollView>
-);
+  const [selectedWord, setSelectedWord] = useState<any | null>(null);
+  const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
+
+  return (
+    <Pressable
+      style={{ flex: 1 }}
+      onPress={() => {
+        if (selectedWord) setSelectedWord(null);
+      }}
+    >
+      <ScrollView style={{ flex: 1 }}>
+        <View
+          style={{
+            width: windowWidth,
+            height: imageHeight,
+            position: "relative",
+          }}
+        >
+
+            <Image
+              source={pageImage}
+              style={{ width: "100%", height: "100%" }}
+              resizeMode="contain"
+              onLayout={(e) => {
+                const { height } = e.nativeEvent.layout;
+                setImageHeight(height);
+              }}
+            />         
+
+          {imageHeight > 0 &&
+            wordData.words.map((word: any, i: number) => {
+              const scaleX = windowWidth / originalWidth;
+              const scaleY = imageHeight / originalHeight;
+
+              return (
+                <Pressable
+                  key={i}
+                  onPress={() => playAudio(word.audio)}
+                  onLongPress={(event) => {
+                    const { pageX, pageY } = event.nativeEvent;
+                    setSelectedWord(word);
+                    setMenuPosition({ x: pageX, y: pageY });
+                  }}
+                  style={{
+                    position: "absolute",
+                    top: word.y * scaleY,
+                    left: word.x * scaleX,
+                    width: word.width * scaleX,
+                    height: word.height * scaleY,
+                    backgroundColor: "rgba(255, 0, 0, 0.2)", // Set to transparent when done
+                  }}
+                />
+              );
+            })}
+
+          {selectedWord && (
+            <View
+              style={{
+                position: "absolute",
+                top: menuPosition.y,
+                left: menuPosition.x,
+                backgroundColor: "#fff",
+                padding: 10,
+                borderRadius: 8,
+                elevation: 5,
+                shadowColor: "#000",
+                shadowOffset: { width: 0, height: 0.5 },
+                shadowOpacity: 0.25,
+                shadowRadius: 4,
+                zIndex: 1000,
+              }}
+              onStartShouldSetResponder={() => true}
+            >
+              <Pressable onPress={() => playAudio(selectedWord.audio)}>
+                <View style={{ paddingVertical: 5 }}>
+                  <Text>🔊 Play</Text>
+                </View>
+              </Pressable>
+
+              <Pressable
+                onPress={() => console.log("Bookmark", selectedWord.text)}
+              >
+                <View style={{ paddingVertical: 5 }}>
+                  <Text>🔖 Bookmark</Text>
+                </View>
+              </Pressable>
+
+              <Pressable onPress={() => setSelectedWord(null)}>
+                <View style={{ paddingVertical: 5 }}>
+                  <Text>❌ Close</Text>
+                </View>
+              </Pressable>
+            </View>
+          )}
+        </View>
+      </ScrollView>
+    </Pressable>
+  );
 }
-
-
-
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-  },
-  background: {
-    flex: 1,
-    position: "absolute",
-    bottom: -175,
-    width: "100%",
-    height: "100%",
-    aspectRatio: 1,
-    alignItems: "flex-start", // Content alignment
-    justifyContent: "center", // Vertical alignment
-  },
-  loginFormContainer: {
-    width: "100%",
-    paddingHorizontal: 25,
-    paddingTop: 100,
-    justifyContent: "center",
     alignItems: "center",
   },
 });
