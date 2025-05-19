@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "FleetManagement",
-    "slug": "FleetManagement",
+    "name": "quraanreadings",
+    "slug": "quraanreadings",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",

@@ -15,7 +15,6 @@ export default function App() {
   useNavigationBarColor();
 
   return (
-    <GestureHandlerRootView style={styles.root}>
       <SafeAreaView style={{ flex: 1 }}>
         <StatusBarColor />
         <RootLayoutNav />
@@ -24,7 +23,6 @@ export default function App() {
         <ConfirmationPopup />
         <ToastCenter />
       </SafeAreaView>
-    </GestureHandlerRootView>
   );
 }
 

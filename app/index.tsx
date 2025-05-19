@@ -1,156 +1,53 @@
-import {
-  StyleSheet,
-  Dimensions,
-  ScrollView,
-  Image,
-  Pressable,
-} from "react-native";
-import { Text, View } from "@/components/Themed";
-import { useDispatch } from "react-redux";
-import { useRouter } from "expo-router";
-import { useEffect, useState } from "react";
-import { Audio } from "expo-av";
-import ImageZoom from "react-native-image-pan-zoom";
+import React from "react";
+import { Dimensions, ScrollView, View, StyleSheet } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { createZoomListComponent, Zoom } from "react-native-reanimated-zoom";
 
-// Static imports
-const pageImage = require("../assets/pages/shoba/page-001.png");
-const wordData = require("../assets/pagesMappings/shoba/page-001.json");
+import Page001 from "../assets/pages/shoba/page-010.svg";
+import Page002 from "../assets/pages/shoba/page-011.svg";
+import Page003 from "../assets/pages/shoba/page-012.svg";
 
-const audioMap: Record<string, any> = {
-  "001.mp3": require("../assets/sounds/shoba/001.mp3"),
-};
-
-const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
-
-const originalWidth = 1600;
-const originalHeight = 2308;
+const { width, height } = Dimensions.get("window");
+const ZoomScrollView = createZoomListComponent(ScrollView);
 
 export default function QuranPage() {
-  const dispatch = useDispatch();
-  const router = useRouter();
-  const [imageHeight, setImageHeight] = useState(600);
-
-  const playAudio = async (filename: string) => {
-    try {
-      const asset = audioMap[filename];
-      if (!asset) {
-        console.error("Audio not found in audioMap for:", filename);
-        return;
-      }
-
-      console.log("Loading audio:", filename);
-      const soundObject = new Audio.Sound();
-      await soundObject.loadAsync(asset);
-      await soundObject.playAsync();
-    } catch (error) {
-      console.error("Audio error:", error);
-    }
-  };
-
-  const [selectedWord, setSelectedWord] = useState<any | null>(null);
-  const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
-
   return (
-    <Pressable
-      style={{ flex: 1 }}
-      onPress={() => {
-        if (selectedWord) setSelectedWord(null);
-      }}
-    >
-      <ScrollView style={{ flex: 1 }}>
-        <View
-          style={{
-            width: windowWidth,
-            height: imageHeight,
-            position: "relative",
-          }}
-        >
-
-            <Image
-              source={pageImage}
-              style={{ width: "100%", height: "100%" }}
-              resizeMode="contain"
-              onLayout={(e) => {
-                const { height } = e.nativeEvent.layout;
-                setImageHeight(height);
-              }}
-            />         
-
-          {imageHeight > 0 &&
-            wordData.words.map((word: any, i: number) => {
-              const scaleX = windowWidth / originalWidth;
-              const scaleY = imageHeight / originalHeight;
-
-              return (
-                <Pressable
-                  key={i}
-                  onPress={() => playAudio(word.audio)}
-                  onLongPress={(event) => {
-                    const { pageX, pageY } = event.nativeEvent;
-                    setSelectedWord(word);
-                    setMenuPosition({ x: pageX, y: pageY });
-                  }}
-                  style={{
-                    position: "absolute",
-                    top: word.y * scaleY,
-                    left: word.x * scaleX,
-                    width: word.width * scaleX,
-                    height: word.height * scaleY,
-                    backgroundColor: "rgba(255, 0, 0, 0.2)", // Set to transparent when done
-                  }}
-                />
-              );
-            })}
-
-          {selectedWord && (
-            <View
-              style={{
-                position: "absolute",
-                top: menuPosition.y,
-                left: menuPosition.x,
-                backgroundColor: "#fff",
-                padding: 10,
-                borderRadius: 8,
-                elevation: 5,
-                shadowColor: "#000",
-                shadowOffset: { width: 0, height: 0.5 },
-                shadowOpacity: 0.25,
-                shadowRadius: 4,
-                zIndex: 1000,
-              }}
-              onStartShouldSetResponder={() => true}
-            >
-              <Pressable onPress={() => playAudio(selectedWord.audio)}>
-                <View style={{ paddingVertical: 5 }}>
-                  <Text>🔊 Play</Text>
-                </View>
-              </Pressable>
-
-              <Pressable
-                onPress={() => console.log("Bookmark", selectedWord.text)}
-              >
-                <View style={{ paddingVertical: 5 }}>
-                  <Text>🔖 Bookmark</Text>
-                </View>
-              </Pressable>
-
-              <Pressable onPress={() => setSelectedWord(null)}>
-                <View style={{ paddingVertical: 5 }}>
-                  <Text>❌ Close</Text>
-                </View>
-              </Pressable>
-            </View>
-          )}
-        </View>
-      </ScrollView>
-    </Pressable>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <ZoomScrollView
+        pagingEnabled // one page at a time
+        minimumZoomScale={1} // no zoom out below 1x
+        maximumZoomScale={3} // up to 3x
+        showsHorizontalScrollIndicator={false}
+        style={styles.scroll}
+        contentContainerStyle={styles.scrollContainer}
+      >
+        <Zoom maximumZoomScale={3}>
+          <View style={styles.page}>
+            <Page001 width={width} height={height} />
+          </View>
+        </Zoom>
+        <Zoom maximumZoomScale={3}>
+          <View style={styles.page}>
+            <Page002 width={width} height={height} />
+          </View>
+        </Zoom>
+        <Zoom maximumZoomScale={3}>
+          <View style={styles.page}>
+            <Page003 width={width} height={height} />
+          </View>
+        </Zoom>
+      </ZoomScrollView>
+    </GestureHandlerRootView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  scroll: { flex: 1 },
+  scrollContainer: { alignItems: "center" },
+  page: {
+    width,
+    height,
+    justifyContent: "center",
     alignItems: "center",
   },
 });
