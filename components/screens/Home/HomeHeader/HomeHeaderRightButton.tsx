@@ -23,12 +23,12 @@ function HomeHeaderRightButton() {
       >
         <FontAwesome name="cog" size={20} style={styles.icon} />
       </TouchableOpacity>
-      <TouchableOpacity
+{/*       <TouchableOpacity
         style={styles.TouchableOpacity}
         onPress={() => dispatch(logoutUser())}
       >
         <FontAwesome name="sign-out" size={20} style={styles.icon} />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   );
 }

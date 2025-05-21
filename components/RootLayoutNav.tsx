@@ -9,14 +9,15 @@ export default function RootLayout() {
       <Stack.Screen
         name="index"
         options={{
-          headerShown: false,
+          header: () => <HomeHeader />,
         }}
       />
       <Stack.Screen
-        name="home"
-        options={{
-          header: () => <HomeHeader />,
-        }}
+        name="quraan-modal"
+        options={({ route }:any) => ({
+          header: () => <ModalHeader title={route.params?.title ?? "Quraan"} />,
+          presentation: "modal",
+        })}
       />
       <Stack.Screen
         name="notifications-modal"

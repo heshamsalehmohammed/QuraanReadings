@@ -1,3 +1,4 @@
+// RootLayout.tsx
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
@@ -20,33 +21,39 @@ import store from "@/redux/store";
 import { Provider } from "react-redux";
 import { useRouter } from "expo-router";
 import RouterSingleton from "@/services/routerSingleton";
+import CustomSplash from "@/components/screens/SplashScreen/Splash";
 
-export {
-  // Catch any errors thrown by the Layout component.
-  ErrorBoundary,
-} from "expo-router";
+// catch any errors thrown by the Layout component
+export { ErrorBoundary } from "expo-router";
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
+// keep the native splash from auto-hiding
+SplashScreen.preventAutoHideAsync()
+  .then(() => SplashScreen.hideAsync())
+  .catch(console.warn);;
 
 export default function RootLayout() {
-  const [loaded, error] = useFonts({
+  const [fontsLoaded, fontError] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
     ...FontAwesome.font,
   });
   const router = useRouter();
-  // Expo Router uses Error Boundaries to catch errors in the navigation tree.
-  useEffect(() => {
-    if (error) throw error;
-  }, [error]);
 
+  // custom splash state
+  const [showSplash, setShowSplash] = useState(true);
+
+  // re-throw font load errors
   useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
+    if (fontError) throw fontError;
+  }, [fontError]);
+
+  // once fonts are loaded, hide native splash
+  useEffect(() => {
+    if (fontsLoaded) {
+      SplashScreen.hideAsync().catch(console.warn);
     }
-  }, [loaded]);
+  }, [fontsLoaded]);
 
-  const colorScheme = Appearance.getColorScheme(); // 'light' or 'dark'
+  const colorScheme = Appearance.getColorScheme();
   const [theme, setTheme] = useState(
     colorScheme === "dark" ? customDarkTheme : customLightTheme
   );
@@ -55,20 +62,19 @@ export default function RootLayout() {
   );
 
   useEffect(() => {
-    const subscription = Appearance.addChangeListener(({ colorScheme }) => {
+    const sub = Appearance.addChangeListener(({ colorScheme }) => {
       setTheme(colorScheme === "dark" ? customDarkTheme : customLightTheme);
       setNavigationTheme(colorScheme === "dark" ? DarkTheme : DefaultTheme);
     });
-
-    // Cleanup the subscription on unmount
-    return () => subscription.remove();
+    return () => sub.remove();
   }, []);
 
-  if (!loaded) {
-    return null;
-  }
-
   RouterSingleton.setRouter(router);
+
+  // when both native splash is hidden and custom splash done, render app
+  if (showSplash) {
+    return <CustomSplash onDone={() => setShowSplash(false)} />;
+  }
 
   return (
     <ApplicationProvider {...eva} theme={theme}>

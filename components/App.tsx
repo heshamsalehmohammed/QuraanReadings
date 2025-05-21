@@ -10,19 +10,18 @@ import StatusBarColor from "./common/StatusBarColor";
 import { StyleSheet } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
-
 export default function App() {
   useNavigationBarColor();
 
   return (
-      <SafeAreaView style={{ flex: 1 }}>
-        <StatusBarColor />
-        <RootLayoutNav />
-        <LoadingOverlay />
-        <MessagePopup />
-        <ConfirmationPopup />
-        <ToastCenter />
-      </SafeAreaView>
+    <SafeAreaView style={{ flex: 1 }}>
+      <StatusBarColor />
+      <RootLayoutNav />
+      <LoadingOverlay />
+      <MessagePopup />
+      <ConfirmationPopup />
+      <ToastCenter />
+    </SafeAreaView>
   );
 }
 
