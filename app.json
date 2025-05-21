@@ -4,18 +4,17 @@
     "slug": "quraanreadings",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/intro.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
-
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.heshamapp"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/intro.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.heshamapp",
@@ -28,10 +27,7 @@
     },
     "plugins": [
       "expo-router",
-      "expo-secure-store",
-      "./expoPlugins/withSoftInputMode",
-      "./expoPlugins/withDarkModeColors",
-      "./expoPlugins/withCustomDatePickerTheme"
+      "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true
@@ -41,7 +37,7 @@
         "origin": false
       },
       "eas": {
-        "projectId": "1f2ce742-f5da-4805-8024-396dc4141cdd"
+        "projectId": "dcaa195c-56cb-4490-8c34-76d423973081"
       }
     }
   }

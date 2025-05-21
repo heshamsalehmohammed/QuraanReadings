@@ -27,9 +27,9 @@ import CustomSplash from "@/components/screens/SplashScreen/Splash";
 export { ErrorBoundary } from "expo-router";
 
 // keep the native splash from auto-hiding
-SplashScreen.preventAutoHideAsync()
+SplashScreen.preventAutoHideAsync()/* 
   .then(() => SplashScreen.hideAsync())
-  .catch(console.warn);;
+  .catch(console.warn); */;
 
 export default function RootLayout() {
   const [fontsLoaded, fontError] = useFonts({
@@ -72,10 +72,10 @@ export default function RootLayout() {
   RouterSingleton.setRouter(router);
 
   // when both native splash is hidden and custom splash done, render app
-  if (showSplash) {
+/*   if (showSplash) {
     return <CustomSplash onDone={() => setShowSplash(false)} />;
   }
-
+ */
   return (
     <ApplicationProvider {...eva} theme={theme}>
       <ThemeProvider value={navigationTheme}>
