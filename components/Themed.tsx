@@ -221,12 +221,22 @@ export function SubmitButton(props: KittenButtonProps & { title: string }) {
 }
 
 export function Button(props: KittenButtonProps & { title: string }) {
-  const { title,onPress, ...otherProps } = props;
+  const { title, disabled, onPress, style, ...otherProps } = props;
 
-  return <KittenButton onPress={(e)=>{
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-      onPress && onPress(e);
-  }} {...otherProps} >{title}</KittenButton>;
+  return (
+    <KittenButton
+      onPress={(e) => {
+        if (!disabled) {
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+          onPress && onPress(e);
+        }
+      }}
+      style={[style, disabled && styles.buttonDisabled]}
+      {...otherProps}
+    >
+      {title}
+    </KittenButton>
+  );
 }
 
 type ValidTextChild = React.ReactText | React.ReactElement;
@@ -274,4 +284,7 @@ const styles = StyleSheet.create({
     height: 1,
     width: "80%",
   },
+  buttonDisabled:{
+    opacity: 0.7
+  }
 });
