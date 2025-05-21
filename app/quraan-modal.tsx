@@ -1,4 +1,4 @@
-import { useCallback, useRef, useEffect, useState } from "react";
+import { useCallback, useRef, useEffect, useState, useContext } from "react";
 import {
   Dimensions,
   View,
@@ -10,8 +10,16 @@ import {
 
 import { Audio, AVPlaybackStatus } from "expo-av";
 
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { createZoomListComponent, Zoom } from "react-native-reanimated-zoom";
+import {
+  GestureHandlerRootView,
+  LongPressGestureHandler,
+  TapGestureHandler,
+} from "react-native-gesture-handler";
+import {
+  createZoomListComponent,
+  Zoom,
+} from "../packages/react-native-reanimated-zoom";
+import { ZoomListContext } from "../packages/react-native-reanimated-zoom/zoom-list-context";
 
 import Page001 from "../assets/pages/shoba/page-010.svg";
 import Page002 from "../assets/pages/shoba/page-011.svg";
@@ -89,6 +97,11 @@ export default function QuraanModal() {
   );
 }
 
+import Animated, { useAnimatedStyle } from "react-native-reanimated";
+
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+const AnimatedView = Animated.createAnimatedComponent(View);
+
 const Hotspot = ({
   hotspot,
   playAudio,
@@ -104,26 +117,54 @@ const Hotspot = ({
 }) => {
   const [menuVisible, setMenuVisible] = useState(false);
 
+  const zoomContext = useContext(ZoomListContext);
+  if (!zoomContext) throw new Error("ZoomListContext not found");
+
+  const { scale, translationX, translationY } = zoomContext;
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    position: "absolute",
+    width: hotspot.w,
+    height: hotspot.h,
+    backgroundColor: "rgba(255,255,0,0.3)",
+    left: 0,
+    top: 0,
+    transform: [
+      { translateX: hotspot.x * scale.value + translationX.value },
+      { translateY: hotspot.y * scale.value + translationY.value },
+      { scale: scale.value },
+    ],
+  }));
+
+  const onTapHandler = () => {
+    console.log("Hotspot tapped");
+    playAudio(hotspot.audio);
+  };
+
+  const onLongPressHandler = () => {
+    console.log("Hotspot long pressed");
+    setMenuVisible(true);
+  };
+
   return (
     <>
-      <Pressable
-        style={[
-          styles.hotspot,
-          {
-            left: hotspot.x,
-            top: hotspot.y,
-            width: hotspot.w,
-            height: hotspot.h,
-          },
-        ]}
-        onPress={() => playAudio(hotspot.audio)}
-        onLongPress={() => {
-          setMenuVisible(true);
-        }}
-      />
+      <LongPressGestureHandler
+        onActivated={onLongPressHandler}
+        minDurationMs={100}
+      >
+        <TapGestureHandler onActivated={onTapHandler}>
+          <AnimatedView style={animatedStyle} />
+        </TapGestureHandler>
+      </LongPressGestureHandler>
+
       <Menu
-        x={hotspot.x}
-        y={hotspot.y + hotspot.h + 4}
+        x={hotspot.x * scale.value + translationX.value}
+        y={
+          hotspot.y * scale.value +
+          translationY.value +
+          hotspot.h * scale.value +
+          4
+        }
         menuVisible={menuVisible}
         setMenuVisible={setMenuVisible}
       />
