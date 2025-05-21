@@ -10,9 +10,9 @@ function HomeHeaderLeftButton() {
     <View style={styles.container}>
       <Pressable onPress={() => console.log("Left button pressed")}>
         {theme === "light" ? (
-          <AppLogoDark height={40} width={80} style={styles.icon} />
+          <AppLogoDark height={40} width={80} />
         ) : (
-          <AppLogoLight height={40} width={80} style={styles.icon} />
+          <AppLogoLight height={40} width={80} />
         )}
       </Pressable>
     </View>
