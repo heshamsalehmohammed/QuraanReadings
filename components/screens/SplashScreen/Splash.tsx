@@ -1,4 +1,6 @@
 // components/CustomSplash.tsx
+import StatusBarColor from "@/components/common/StatusBarColor";
+import { SafeAreaView } from "@/components/Themed";
 import React, { useEffect } from "react";
 import { View, Image, StyleSheet } from "react-native";
 
@@ -9,12 +11,15 @@ export default function SplashScreen({ onDone }: { onDone(): void }) {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <Image
-        source={require("../../../assets/images/intro.png")}
-        style={styles.image}
-      />
-    </View>
+    <SafeAreaView style={{ flex: 1 }}>
+       <StatusBarColor />
+      <View style={styles.container}>
+        <Image
+          source={require("../../../assets/images/intro.png")}
+          style={styles.image}
+        />
+      </View>
+    </SafeAreaView>
   );
 }
 
