@@ -126,7 +126,7 @@ const Hotspot = ({
     position: "absolute",
     width: hotspot.w,
     height: hotspot.h,
-    backgroundColor: "rgba(255,255,0,0.3)",
+    backgroundColor: "rgba(255, 106, 0, 0.3)",
     left: 0,
     top: 0,
     transform: [
@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
   },
   hotspot: {
     position: "absolute",
-    backgroundColor: "rgba(255,255,0,0.3)",
+    backgroundColor: "rgba(255, 55, 0, 0.3)",
   },
   menu: {
     position: "absolute",
