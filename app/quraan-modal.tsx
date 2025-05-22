@@ -21,9 +21,9 @@ import {
 } from "../packages/react-native-reanimated-zoom";
 import { ZoomListContext } from "../packages/react-native-reanimated-zoom/zoom-list-context";
 
-import Page001 from "../assets/pages/shoba/page-010.svg";
-import Page002 from "../assets/pages/shoba/page-011.svg";
-import Page003 from "../assets/pages/shoba/page-012.svg";
+import Page001 from "../assets/pages/hafs/page-010.svg";
+import Page002 from "../assets/pages/hafs/page-011.svg";
+import Page003 from "../assets/pages/hafs/page-012.svg";
 
 const { width, height: rawH } = Dimensions.get("window");
 const headerH = 65;

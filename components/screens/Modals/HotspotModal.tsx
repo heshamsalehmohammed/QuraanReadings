@@ -12,11 +12,15 @@ import { Modalize } from "react-native-modalize";
 
 import { useCombinedRefs } from "../../../hooks/use-combined-refs";
 
+import Word00001Page001 from "../../../assets/pages/shuba/words/00001.svg";
+import { View } from "@/components/Themed";
+import { Divider } from "@ui-kitten/components";
+
 const { width } = Dimensions.get("window");
 const HEADER_HEIGHT = 100;
 
 LogBox.ignoreLogs([
-  'Warning: This synthetic event is reused' // ignore the exact message text
+  "Warning: This synthetic event is reused", // ignore the exact message text
 ]);
 
 export const HotspotModal = forwardRef((_, ref) => {
@@ -30,104 +34,119 @@ export const HotspotModal = forwardRef((_, ref) => {
     setHandle(position === "top");
   };
 
+  const scale = animated.interpolate({
+    inputRange: [0, 1],
+    outputRange: [2, 7],
+    extrapolate: "clamp",
+  });
+
+  const translateX = scale.interpolate({
+    inputRange: [2, 7],
+    outputRange: [0, -(7 - 2) * 360],
+    extrapolate: "clamp",
+  });
+
+  const translateY = scale.interpolate({
+    inputRange: [2, 7],
+    outputRange: [0, -(7 - 2) * 360],
+    extrapolate: "clamp",
+  });
+
   const renderContent = () => (
     <>
-      <Animated.View
-        style={[
-          s.content__cover,
-          {
-            shadowOpacity: animated.interpolate({
-              inputRange: [0, 1],
-              outputRange: [0.2, 0.35],
-            }),
-            transform: [
-              {
-                scale: animated.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [0.18, 1],
-                  extrapolate: "clamp",
-                }),
-              },
-              {
-                translateX: animated.interpolate({
-                  inputRange: [0, 0.25, 1],
-                  outputRange: [0, 100, 140],
-                  extrapolate: "clamp",
-                }),
-              },
-              {
-                translateY: animated.interpolate({
-                  inputRange: [0, 0.25, 1],
-                  outputRange: [0, 100, 165],
-                  extrapolate: "clamp",
-                }),
-              },
-            ],
-          },
-        ]}
-      >
-        <Animated.Image
+      <View>
+        <Animated.View
           style={[
-            s.content__asset,
+            s.content__cover,
             {
-              borderRadius: animated.interpolate({
-                inputRange: [0, 1],
-                outputRange: [32, 8],
+              transform: [
+                {
+                  scale: animated.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [1, 3],
+                    extrapolate: "clamp",
+                  }),
+                },
+                {
+                  translateX: animated.interpolate({
+                    inputRange: [0, 0.25, 1],
+                    outputRange: [0, 22, 42],
+                    extrapolate: "clamp",
+                  }),
+                },
+                {
+                  translateY: animated.interpolate({
+                    inputRange: [0, 0.25, 1],
+                    outputRange: [0, 15, 30],
+                    extrapolate: "clamp",
+                  }),
+                },
+              ],
+            },
+          ]}
+        >
+          <Word00001Page001
+            style={{ flex: 1, height: "100%", width: "100%" }}
+          />
+        </Animated.View>
+        <Animated.View
+          style={[
+            s.content__header,
+            {
+              opacity: animated.interpolate({
+                inputRange: [0, 0.75],
+                outputRange: [1, 0],
               }),
             },
           ]}
-          source={{
-            uri: "https://images.genius.com/7ea34ad2fa694fb706de3e81dc1588c4.1000x1000x1.jpg",
-          }}
-        />
-      </Animated.View>
+        >
+          <TouchableOpacity activeOpacity={0.75}>
+            <Image
+              style={{ marginRight: 10 }}
+              source={require("../../../assets/images/pause.png")}
+            />
+          </TouchableOpacity>
 
-      <Animated.View
-        style={[
-          s.content__header,
-          {
-            opacity: animated.interpolate({
-              inputRange: [0, 0.75],
-              outputRange: [1, 0],
-            }),
-          },
-        ]}
-      >
-        <Text style={s.content__title}>Your Design</Text>
+          <TouchableOpacity activeOpacity={0.75}>
+            <Image source={require("../../../assets/images/forward.png")} />
+          </TouchableOpacity>
+        </Animated.View>
+        <Animated.View
+          style={[
+            s.content__inner,
+            {
+              opacity: animated.interpolate({
+                inputRange: [0, 1],
+                outputRange: [0, 1],
+              }),
+              transform: [
+                {
+                  translateY: animated.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [-300, 0],
+                  }),
+                },
+              ],
+            },
+          ]}
+        >
+          <View style={{ width: "100%" }}>
+            <Text style={s.headerText}>الحكم</Text>
+            <Text style={s.contentText}>ابدال الواو همزه</Text>
+          </View>
 
-        <TouchableOpacity activeOpacity={0.75}>
-          <Image
-            style={{ marginRight: 30 }}
-            source={require("../../../assets/images/pause.png")}
+          <Divider
+            style={{
+              width: "80%",
+              marginVertical: 10,
+              backgroundColor: "#ccc",
+            }}
           />
-        </TouchableOpacity>
-
-        <TouchableOpacity activeOpacity={0.75}>
-          <Image source={require("../../../assets/images/forward.png")} />
-        </TouchableOpacity>
-      </Animated.View>
-
-      <Animated.Image
-        // I didn't want to recreate the whole thing, so just exported as an image
-        style={[
-          s.content__inner,
-          {
-            opacity: animated.interpolate({
-              inputRange: [0, 1],
-              outputRange: [0, 1],
-            }),
-            transform: [
-              {
-                translateY: animated.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [-300, 0],
-                }),
-              },
-            ],
-          },
-        ]}
-        source={require("../../../assets/images/inner-player.png")}
-      />
+          <View style={{ width: "100%" }}>
+            <Text style={s.headerText}>القراءات المتاحه</Text>
+          </View>
+        </Animated.View>
+      </View>
     </>
   );
 
@@ -161,7 +180,7 @@ const s = StyleSheet.create({
 
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "flex-end",
 
     height: HEADER_HEIGHT,
 
@@ -171,17 +190,10 @@ const s = StyleSheet.create({
 
   content__cover: {
     zIndex: 100,
-
-    marginTop: -132, // not the best
-    marginLeft: -115, // not the best
-
-    width: 360,
-    height: 360,
-
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.35,
-    shadowRadius: 18,
+    width: 80,
+    height: 80,
+    marginLeft: 20,
+    marginTop: 5,
   },
 
   content__asset: {
@@ -198,6 +210,25 @@ const s = StyleSheet.create({
 
   content__inner: {
     top: 200,
-    left: 30,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  headerText: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 8,
+    color: "#222",
+    textAlign: "right",
+    marginRight: 50,
+  },
+
+  contentText: {
+    fontSize: 18,
+    color: "#444",
+    textAlign: "right",
+    marginRight: 50,
   },
 });
