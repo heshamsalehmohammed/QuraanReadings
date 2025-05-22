@@ -1,20 +1,21 @@
 import React, { useRef, forwardRef, useState } from "react";
 import {
-  Image,
   StyleSheet,
   Text,
   Animated,
   TouchableOpacity,
   Dimensions,
   LogBox,
+  TextStyle,
 } from "react-native";
 import { Modalize } from "react-native-modalize";
 
 import { useCombinedRefs } from "../../../hooks/use-combined-refs";
 
 import Word00001Page001 from "../../../assets/pages/shuba/words/00001.svg";
-import { View } from "@/components/Themed";
+import { FontAwesome, View } from "@/components/Themed";
 import { Divider } from "@ui-kitten/components";
+
 
 const { width } = Dimensions.get("window");
 const HEADER_HEIGHT = 100;
@@ -33,25 +34,6 @@ export const HotspotModal = forwardRef((_, ref) => {
   const handlePosition = (position: any) => {
     setHandle(position === "top");
   };
-
-  const scale = animated.interpolate({
-    inputRange: [0, 1],
-    outputRange: [2, 7],
-    extrapolate: "clamp",
-  });
-
-  const translateX = scale.interpolate({
-    inputRange: [2, 7],
-    outputRange: [0, -(7 - 2) * 360],
-    extrapolate: "clamp",
-  });
-
-  const translateY = scale.interpolate({
-    inputRange: [2, 7],
-    outputRange: [0, -(7 - 2) * 360],
-    extrapolate: "clamp",
-  });
-
   const renderContent = () => (
     <>
       <View>
@@ -100,15 +82,12 @@ export const HotspotModal = forwardRef((_, ref) => {
             },
           ]}
         >
-          <TouchableOpacity activeOpacity={0.75}>
-            <Image
-              style={{ marginRight: 10 }}
-              source={require("../../../assets/images/pause.png")}
-            />
+          <TouchableOpacity activeOpacity={0.75} style={{ marginRight: 20 }}>
+            <FontAwesome name="pause" size={24} />
           </TouchableOpacity>
 
           <TouchableOpacity activeOpacity={0.75}>
-            <Image source={require("../../../assets/images/forward.png")} />
+            <FontAwesome name="heart" size={24} />
           </TouchableOpacity>
         </Animated.View>
         <Animated.View

@@ -29,41 +29,14 @@ const { width, height: rawH } = Dimensions.get("window");
 const headerH = 65;
 const pageH = rawH - headerH;
 
-const audioMap: Record<string, any> = {
-  "00001": require("../assets/sounds/shoba/00001.mp3"),
-};
-const hotspots = [{ page: 1, audio: "00001", x: 245, y: 421, w: 35, h: 30 }];
+const hotspots = [
+  { page: 1, audio: "00001-shuba", x: 245, y: 421, w: 35, h: 30 },
+];
 
 const ZoomScrollView = createZoomListComponent(ScrollView);
 
 export default function QuraanModal() {
-  const soundRef = useRef<Audio.Sound | null>(null);
   const modalizeRef = useRef<Modalize>(null);
-
-  const playAudio = useCallback(async (id: string) => {
-    if (soundRef.current) {
-      await soundRef.current.stopAsync();
-      await soundRef.current.unloadAsync();
-      soundRef.current = null;
-    }
-    const asset = audioMap[id];
-    if (!asset) return;
-    const { sound } = await Audio.Sound.createAsync(asset);
-    soundRef.current = sound;
-    await sound.playAsync();
-    sound.setOnPlaybackStatusUpdate((st: AVPlaybackStatus) => {
-      if (st.isLoaded && st.didJustFinish) {
-        sound.unloadAsync();
-        soundRef.current = null;
-      }
-    });
-  }, []);
-
-  useEffect(() => {
-    return () => {
-      soundRef.current?.unloadAsync().catch(console.error);
-    };
-  }, []);
 
   return (
     <>
@@ -88,30 +61,33 @@ export default function QuraanModal() {
                     <Hotspot
                       key={idx}
                       hotspot={{ x, y, w, h, audio }}
-                      playAudio={playAudio}
                       modalizeRef={modalizeRef}
                     />
                   ))}
               </View>
             </Zoom>
           ))}
-        </ZoomScrollView><HotspotModal ref={modalizeRef} />
+        </ZoomScrollView>
+        <HotspotModal ref={modalizeRef} />
       </GestureHandlerRootView>
-      
     </>
   );
 }
 
-import Animated, { useAnimatedStyle, useSharedValue } from "react-native-reanimated";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+} from "react-native-reanimated";
 import { HotspotModal } from "@/components/screens/Modals/HotspotModal";
 import { Modalize } from "react-native-modalize";
+import React from "react";
+import { audioService } from "@/services/audio";
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 const AnimatedView = Animated.createAnimatedComponent(View);
 
 const Hotspot = ({
   hotspot,
-  playAudio,
   modalizeRef,
 }: {
   hotspot: {
@@ -121,7 +97,6 @@ const Hotspot = ({
     h: number;
     audio: string;
   };
-  playAudio: (audio: string) => void;
   modalizeRef: React.RefObject<Modalize>;
 }) => {
   const [menuVisible, setMenuVisible] = useState(false);
@@ -145,8 +120,8 @@ const Hotspot = ({
     ],
   }));
 
-  const onTapHandler = (event:any) => {
-    playAudio(hotspot.audio);
+  const onTapHandler = (event: any) => {
+    audioService.playAudio(hotspot.audio);
     modalizeRef.current?.open();
   };
 
