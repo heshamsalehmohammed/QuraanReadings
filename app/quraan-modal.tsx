@@ -30,7 +30,15 @@ const headerH = 65;
 const pageH = rawH - headerH;
 
 const hotspots = [
-  { page: 1, audio: "00001-shuba", x: 245, y: 421, w: 35, h: 30 },
+  {
+    page: 1,
+    audio: "00001-shuba",
+    x: 245,
+    y: 421,
+    w: 35,
+    h: 30,
+    otherAudios: ["00001-hafs"],
+  },
 ];
 
 const ZoomScrollView = createZoomListComponent(ScrollView);
@@ -57,10 +65,10 @@ export default function QuraanModal() {
                 {hotspots
                   .map((h, idx) => ({ ...h, idx }))
                   .filter((h) => h.page === pageIdx + 1)
-                  .map(({ audio, x, y, w, h, idx }) => (
+                  .map((hotspot,index) => (
                     <Hotspot
-                      key={idx}
-                      hotspot={{ x, y, w, h, audio }}
+                      key={`idx-${index}`}
+                      hotspot={hotspot}
                       modalizeRef={modalizeRef}
                     />
                   ))}
@@ -89,16 +97,7 @@ const AnimatedView = Animated.createAnimatedComponent(View);
 const Hotspot = ({
   hotspot,
   modalizeRef,
-}: {
-  hotspot: {
-    x: number;
-    y: number;
-    w: number;
-    h: number;
-    audio: string;
-  };
-  modalizeRef: React.RefObject<Modalize>;
-}) => {
+}:any) => {
   const [menuVisible, setMenuVisible] = useState(false);
 
   const zoomContext = useContext(ZoomListContext);
@@ -121,8 +120,7 @@ const Hotspot = ({
   }));
 
   const onTapHandler = (event: any) => {
-    audioService.playAudio(hotspot.audio);
-    modalizeRef.current?.open();
+    modalizeRef.current?.openWithHotspot(hotspot);
   };
 
   const onLongPressHandler = () => {
