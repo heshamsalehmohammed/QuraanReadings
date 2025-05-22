@@ -38,6 +38,7 @@ const ZoomScrollView = createZoomListComponent(ScrollView);
 
 export default function QuraanModal() {
   const soundRef = useRef<Audio.Sound | null>(null);
+  const modalizeRef = useRef<Modalize>(null);
 
   const playAudio = useCallback(async (id: string) => {
     if (soundRef.current) {
@@ -65,39 +66,45 @@ export default function QuraanModal() {
   }, []);
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <ZoomScrollView
-        pagingEnabled
-        minimumZoomScale={1}
-        maximumZoomScale={3}
-        showsHorizontalScrollIndicator={false}
-        style={styles.scroll}
-        contentContainerStyle={styles.scrollContainer}
-      >
-        {[Page001, Page002, Page003].map((Page, pageIdx) => (
-          <Zoom key={pageIdx} maximumZoomScale={3}>
-            <View style={styles.page}>
-              <Page width={width} height={pageH} />
+    <>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <ZoomScrollView
+          pagingEnabled
+          minimumZoomScale={1}
+          maximumZoomScale={3}
+          showsHorizontalScrollIndicator={false}
+          style={styles.scroll}
+          contentContainerStyle={styles.scrollContainer}
+        >
+          {[Page001, Page002, Page003].map((Page, pageIdx) => (
+            <Zoom key={pageIdx} maximumZoomScale={3}>
+              <View style={styles.page}>
+                <Page width={width} height={pageH} />
 
-              {hotspots
-                .map((h, idx) => ({ ...h, idx }))
-                .filter((h) => h.page === pageIdx + 1)
-                .map(({ audio, x, y, w, h, idx }) => (
-                  <Hotspot
-                    key={idx}
-                    hotspot={{ x, y, w, h, audio }}
-                    playAudio={playAudio}
-                  />
-                ))}
-            </View>
-          </Zoom>
-        ))}
-      </ZoomScrollView>
-    </GestureHandlerRootView>
+                {hotspots
+                  .map((h, idx) => ({ ...h, idx }))
+                  .filter((h) => h.page === pageIdx + 1)
+                  .map(({ audio, x, y, w, h, idx }) => (
+                    <Hotspot
+                      key={idx}
+                      hotspot={{ x, y, w, h, audio }}
+                      playAudio={playAudio}
+                      modalizeRef={modalizeRef}
+                    />
+                  ))}
+              </View>
+            </Zoom>
+          ))}
+        </ZoomScrollView><HotspotModal ref={modalizeRef} />
+      </GestureHandlerRootView>
+      
+    </>
   );
 }
 
-import Animated, { useAnimatedStyle } from "react-native-reanimated";
+import Animated, { useAnimatedStyle, useSharedValue } from "react-native-reanimated";
+import { HotspotModal } from "@/components/screens/Modals/HotspotModal";
+import { Modalize } from "react-native-modalize";
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 const AnimatedView = Animated.createAnimatedComponent(View);
@@ -105,6 +112,7 @@ const AnimatedView = Animated.createAnimatedComponent(View);
 const Hotspot = ({
   hotspot,
   playAudio,
+  modalizeRef,
 }: {
   hotspot: {
     x: number;
@@ -114,6 +122,7 @@ const Hotspot = ({
     audio: string;
   };
   playAudio: (audio: string) => void;
+  modalizeRef: React.RefObject<Modalize>;
 }) => {
   const [menuVisible, setMenuVisible] = useState(false);
 
@@ -136,9 +145,9 @@ const Hotspot = ({
     ],
   }));
 
-  const onTapHandler = () => {
-    console.log("Hotspot tapped");
+  const onTapHandler = (event:any) => {
     playAudio(hotspot.audio);
+    modalizeRef.current?.open();
   };
 
   const onLongPressHandler = () => {
